@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import MovieList from "../../components/MovieList/MovieList";
-import fetchMoviesBySearch from "../../api/api";
+import { fetchMoviesBySearch } from "../../api/api";
 import { useSearchParams } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
+import css from "./MoviesPage.module.css";
 
 const MoviesPage = () => {
   const [loading, setLoading] = useState(false);
@@ -28,9 +29,7 @@ const MoviesPage = () => {
         const searchMovies = await fetchMoviesBySearch(value);
         setMovieItems(searchMovies);
       } catch (error) {
-        window.alert(
-          "Oops! Something went wrong! Please try reloading this page!"
-        );
+        return { error: "Oops! Something went wrong! Please reload the page!" };
       } finally {
         setLoading(false);
       }
@@ -39,13 +38,13 @@ const MoviesPage = () => {
   }, [searchParams]);
 
   return (
-    <>
+    <div className={css.moviesPage}>
       {loading && <Loader />}
 
       <SearchBar onSubmit={handleSearchFormSubmit} />
 
       {searchParams && <MovieList items={movieItems} />}
-    </>
+    </div>
   );
 };
 

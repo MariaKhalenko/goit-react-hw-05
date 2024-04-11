@@ -1,7 +1,8 @@
-import fetchMovieCast from "../../api/api";
+import { fetchMovieCast } from "../../api/api";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Loader from "../Loader/Loader";
+import css from "./MovieCast.module.css";
 
 const MovieCast = () => {
   const { movieId } = useParams();
@@ -12,7 +13,6 @@ const MovieCast = () => {
 
   useEffect(() => {
     if (!movieId) return;
-
     async function getCast() {
       try {
         setLoading(true);
@@ -29,20 +29,40 @@ const MovieCast = () => {
   }, [movieId]);
 
   const defaultImage =
-    "https://via.placeholder.com/250x375.png?text=Image+Not+Found";
+    "https://dl-media.viber.com/10/share/2/long/vibes/icon/image/0x0/95e0/5688fdffb84ff8bed4240bcf3ec5ac81ce591d9fa9558a3a968c630eaba195e0.jpg";
+
+  const scrollToBottom = () => {
+    window.scrollBy({
+      top: 400,
+      behavior: "smooth",
+    });
+  };
+
+  useEffect(() => {
+    if (!loading) {
+      scrollToBottom();
+    }
+  }, [loading]);
 
   return (
-    <div>
+    <>
       {loading && <Loader />}
       {error && (
-        <h2>Oops! Something went wrong! Please try reloading this page!</h2>
+        <div>
+          {error && (
+            <p className={css.errorMessage}>
+              Oops! Something went wrong! Please reload the page!
+            </p>
+          )}
+        </div>
       )}
 
-      <ul>
+      <ul className={css.castList}>
         {castMovie.length > 0 ? (
           castMovie.map(({ profile_path, name, character, id }) => (
-            <li key={id}>
+            <li className={css.castMovies} key={id}>
               <img
+                className={css.castImage}
                 src={
                   profile_path
                     ? `https://image.tmdb.org/t/p/w500/${profile_path}`
@@ -52,15 +72,17 @@ const MovieCast = () => {
                 width={250}
                 height={375}
               />
-              <p>{name}</p>
-              <p>{`Character: ${character}`}</p>
+              <h2 className={css.moviesName}>{name}</h2>
+              <p className={css.moviesCharacter}>{`Character: ${character}`}</p>
             </li>
           ))
         ) : (
-          <p>We don`t have any information about the actors.</p>
+          <p className={css.errorMessage}>
+            We don`t have any information about the actors.
+          </p>
         )}
       </ul>
-    </div>
+    </>
   );
 };
 

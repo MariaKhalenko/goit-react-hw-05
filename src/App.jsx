@@ -1,5 +1,5 @@
 import { Suspense, lazy } from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Loader from "./components/Loader/Loader";
 import Navigation from "./components/Navigation/Navigation";
 
@@ -12,6 +12,7 @@ const MovieCast = lazy(() => import("./components/MovieCast/MovieCast"));
 const MovieReviews = lazy(() =>
   import("./components/MovieReviews/MovieReviews")
 );
+const NotFoundPage = lazy(() => import("./pages/NotFoundPage/NotFoundPage"));
 
 const App = () => {
   return (
@@ -60,7 +61,7 @@ const App = () => {
         </Route>
       </Route>
 
-      <Route path="*" element={<Navigate to={"/"} />}></Route>
+      <Route path="*" element={<NotFoundPage to={"/"} />}></Route>
     </Routes>
   );
 };

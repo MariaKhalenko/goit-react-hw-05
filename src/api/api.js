@@ -8,13 +8,13 @@ const token =
 
 axios.defaults.headers.common["Authorization"] = token;
 
-const fetchTrendingList = async () => {
+export const fetchTrendingList = async () => {
   const response = await axios.get(`/trending/all/day?api_key=${API_KEY}`);
   const { results } = response.data;
   return results;
 };
 
-const fetchMoviesBySearch = async (query) => {
+export const fetchMoviesBySearch = async (query) => {
   const response = await axios.get(
     `/search/movie?query=${query}&api_key=${API_KEY}`
   );
@@ -22,12 +22,20 @@ const fetchMoviesBySearch = async (query) => {
   return results;
 };
 
-const fetchMovieById = async (movieId) => {
-  const response = await axios.get(`/movie/${movieId}?api_key=${API_KEY}`);
-  return response.data;
+export const fetchMovieById = async (movieId) => {
+  try {
+    const response = await axios.get(`/movie/${movieId}?api_key=${API_KEY}`);
+    return response.data;
+  } catch (error) {
+    if (error.response && error.response.status === 404) {
+      return { error: "Oops! Movie not found" };
+    } else {
+      return { error: "Oops! Something went wrong! Please reload the page!" };
+    }
+  }
 };
 
-const fetchMovieCast = async (movieId) => {
+export const fetchMovieCast = async (movieId) => {
   const response = await axios.get(
     `/movie/${movieId}/credits?api_key=${API_KEY}`
   );
@@ -35,18 +43,10 @@ const fetchMovieCast = async (movieId) => {
   return cast;
 };
 
-const fetchMovieReviews = async (movieId) => {
+export const fetchMovieReviews = async (movieId) => {
   const response = await axios.get(
     `/movie/${movieId}/reviews?api_key=${API_KEY}`
   );
   const { results } = response.data;
   return results;
-};
-
-export default {
-  fetchTrendingList,
-  fetchMoviesBySearch,
-  fetchMovieById,
-  fetchMovieCast,
-  fetchMovieReviews,
 };

@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
+import css from "./MovieList.module.css";
 
 const MovieList = ({ items }) => {
   const defaultImage =
@@ -6,13 +7,14 @@ const MovieList = ({ items }) => {
   const location = useLocation();
 
   return (
-    <ul>
+    <ul className={css.movieList}>
       {items.map(({ poster_path, name, title, id }) => (
-        <li key={id}>
+        <li className={css.movieCard} key={id}>
           <Link to={`/movies/${id}`} state={{ from: location }}>
             {
               <div>
                 <img
+                  className={css.image}
                   src={
                     poster_path
                       ? `https://image.tmdb.org/t/p/w500/${poster_path}`
@@ -22,7 +24,7 @@ const MovieList = ({ items }) => {
                   width={250}
                   height={375}
                 />
-                <p>{name || title}</p>
+                <h2 className={css.movieTitle}>{name || title}</h2>
               </div>
             }
           </Link>

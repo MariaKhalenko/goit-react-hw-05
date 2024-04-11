@@ -1,33 +1,40 @@
-// import css from "./SelectedMovieDetails.module.css";
+import css from "./MovieDetalsInfo.module.css";
 
 const MovieDetalsInfo = ({
   movie: { poster_path, title, release_date, vote_average, overview, genres },
 }) => {
   const defaultImage =
-    "https://via.placeholder.com/250x375.png?text=Image+Not+Found";
+    "https://dl-media.viber.com/10/share/2/long/vibes/icon/image/0x0/95e0/5688fdffb84ff8bed4240bcf3ec5ac81ce591d9fa9558a3a968c630eaba195e0.jpg";
 
   return (
-    <div>
+    <div className={css.detalsPage}>
       <img
+        className={css.posterImage}
         src={
           poster_path
             ? `https://image.tmdb.org/t/p/w500/${poster_path}`
             : defaultImage
         }
         alt={title}
-        width={400}
+        width={350}
       />
-      <div>
-        <h1>{`${title} (${release_date.split("-")[0]})`}</h1>
-        <h4>{`User Store: ${Math.round(vote_average * 10)}%`}</h4>
-        <h2>Owerview</h2>
-        <p>{overview}</p>
+      <div className={css.detalsInfo}>
+        <h2 className={css.detalsTitle}>{`${title} (${
+          release_date.split("-")[0]
+        })`}</h2>
+        <p className={css.detalsText}>{`User store: ${Math.round(
+          vote_average * 10
+        )}%`}</p>
+        <h3 className={css.detalsOwerview}>Owerview</h3>
+        <p className={css.detalsText}>{overview}</p>
         {genres && genres.length > 0 && (
           <>
-            <h3>Genres</h3>
-            <p>
+            <h4 className={css.detalsGenres}>Genres</h4>
+            <p className={css.detalsText}>
               {genres.map((genre, idx) => (
-                <span key={idx}>{genre.name}</span>
+                <span className={css.genre} key={idx}>
+                  {genre.name} {idx < genres.length - 1 && ", "}
+                </span>
               ))}
             </p>
           </>

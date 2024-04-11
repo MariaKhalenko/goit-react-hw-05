@@ -1,7 +1,8 @@
-import fetchMovieReviews from "../../api/api";
+import { fetchMovieReviews } from "../../api/api";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Loader from "../Loader/Loader";
+import css from "./MovieReviews.module.css";
 
 const MovieReviews = () => {
   const { movieId } = useParams();
@@ -28,24 +29,41 @@ const MovieReviews = () => {
     getCast();
   }, [movieId]);
 
+  const scrollToBottom = () => {
+    window.scrollBy({
+      top: 400,
+      behavior: "smooth",
+    });
+  };
+
+  useEffect(() => {
+    if (!loading) {
+      scrollToBottom();
+    }
+  }, [loading]);
+
   return (
     <div>
       {loading && <Loader />}
       {error && (
-        <h2>Oops! Something went wrong! Please try reloading this page!</h2>
+        <p className={css.errorMessage}>
+          Oops! Something went wrong! Please reload the page!
+        </p>
       )}
 
       {reviewsMovie.length > 0 ? (
         <ul>
           {reviewsMovie.map((review) => (
-            <li key={review.id}>
-              <h2>Author: {review.author}</h2>
-              <p>{review.content}</p>
+            <li className={css.reviewInfo} key={review.id}>
+              <h2 className={css.reviewAuthor}>Author: {review.author}</h2>
+              <p className={css.reviewText}>{review.content}</p>
             </li>
           ))}
         </ul>
       ) : (
-        <p>We don`t have any reviews for this movie.</p>
+        <p className={css.errorMessage}>
+          We don`t have any reviews for this movie.
+        </p>
       )}
     </div>
   );
